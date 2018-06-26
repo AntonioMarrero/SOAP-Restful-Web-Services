@@ -1,4 +1,4 @@
-package com.revature.soap.webservices.soapcoursemanagement.soap;
+package com.in28minutes.soap.webservices.soapcoursemanagement.soap;
 
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
@@ -13,38 +13,33 @@ import org.springframework.xml.xsd.XsdSchema;
 
 //Enable Spring Web Services
 @EnableWs
-//Spring Configuration
+// Spring Configuration
 @Configuration
 public class WebServiceConfig {
+	// MessageDispatcherServlet
+	// ApplicationContext
+	// url -> /ws/*
 
-	//MessageDispatcherServlet
-		//ApplicationContext
-	//url -> /ws/*	
 	@Bean
-	public ServletRegistrationBean messageDispatcherSevlet(ApplicationContext context) {				
-		MessageDispatcherServlet messageDispatcherSevlet = new MessageDispatcherServlet();
-		messageDispatcherSevlet.setApplicationContext(context);
-		messageDispatcherSevlet.setTransformWsdlLocations(true);		
-		return new ServletRegistrationBean(messageDispatcherSevlet, "/ws/*");
+	public ServletRegistrationBean messageDispatcherServlet(ApplicationContext context) {
+		MessageDispatcherServlet messageDispatcherServlet = new MessageDispatcherServlet();
+		messageDispatcherServlet.setApplicationContext(context);
+		messageDispatcherServlet.setTransformWsdlLocations(true);
+		return new ServletRegistrationBean(messageDispatcherServlet, "/ws/*");
 	}
-	
-	// /ws/course.wsdl		
+
+	// /ws/courses.wsdl
 	// course-details.xsd
-	@Bean(name="courses")
+	@Bean(name = "courses")
 	public DefaultWsdl11Definition defaultWsdl11Definition(XsdSchema coursesSchema) {
-		DefaultWsdl11Definition definition = new DefaultWsdl11Definition();		
-		//PortType - CoursePort
+		DefaultWsdl11Definition definition = new DefaultWsdl11Definition();
 		definition.setPortTypeName("CoursePort");
-		//Namespace - http://revature.com/courses
-		definition.setTargetNamespace("http://revature.com/courses");
-		// /ws
+		definition.setTargetNamespace("http://in28minutes.com/courses");
 		definition.setLocationUri("/ws");
-		//schema
 		definition.setSchema(coursesSchema);
-		
 		return definition;
 	}
-	
+
 	@Bean
 	public XsdSchema coursesSchema() {
 		return new SimpleXsdSchema(new ClassPathResource("course-details.xsd"));
